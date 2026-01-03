@@ -51,7 +51,12 @@
             -webkit-text-fill-color: transparent;
         }
 
-        /* --- ADVANCED ANIMATION STYLES --- */
+        /* --- ANIMATION STYLES --- */
+        :root {
+            --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+            --ease-spin: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
         #splash-screen {
             position: fixed;
             inset: 0;
@@ -64,26 +69,24 @@
             font-weight: 700;
             font-size: 4rem; 
             color: #fff;
-            perspective: 1000px; /* Essential for 3D effect */
+            perspective: 1000px;
         }
 
         .anim-container {
             display: flex;
             align-items: baseline;
             position: relative;
-            height: 90px; /* Fixed height to prevent jumping */
         }
 
-        /* The 3D Character Container */
-        .char-wrapper {
-            position: relative;
+        /* The 3D Character Container (@) */
+        #wrapper-at {
             display: inline-block;
             transform-style: preserve-3d;
-            /* No transition here, handled by JS class */
+            color: #d946ef; /* Match brand color */
         }
 
         .spin-3d {
-            animation: spinFlip 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+            animation: spinFlip 0.9s var(--ease-spin) forwards;
         }
 
         @keyframes spinFlip {
@@ -98,45 +101,30 @@
             max-width: 0;
             opacity: 0;
             white-space: nowrap;
-            transition: max-width 1s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s ease;
+            transition: max-width 1.2s var(--ease-smooth), opacity 0.6s ease;
         }
 
-        #text-arth { color: #e879f9; }
+        /* Colors to match screenshot */
+        #text-arth { color: #d946ef; }
+        #char-underscore { color: #22d3ee; }
         #text-ral { color: #22d3ee; }
         
-        /* The Underscore/Underline Logic */
-        .underscore-wrapper {
-            display: inline-flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-end;
-            position: relative;
-            width: 40px; /* Fixed width matching the letter/symbol */
-        }
-
-        #char-underscore {
-            opacity: 0;
-            transform: translateY(10px);
-            transition: all 0.5s ease;
-        }
-
-        #dynamic-underline {
+        /* The Initial Underline */
+        #initial-underline {
             position: absolute;
-            bottom: 15px; /* Initial position under letter */
+            bottom: -8px;
             left: 0;
             width: 100%;
             height: 6px;
             background: #d946ef;
             border-radius: 4px;
             opacity: 0;
-            transition: bottom 0.5s cubic-bezier(0.22, 1, 0.36, 1), 
-                        width 0.5s ease, 
-                        opacity 0.3s ease;
+            transition: opacity 0.4s ease;
         }
 
         /* Final Fade Out */
         .blur-out {
-            animation: blurOut 0.8s forwards;
+            animation: blurOut 1s var(--ease-smooth) forwards;
             pointer-events: none;
         }
 
@@ -152,14 +140,14 @@
 
     <div id="splash-screen">
         <div class="anim-container">
-            <div id="wrapper-at" class="char-wrapper">e</div>
-            
             <div id="text-arth" class="reveal-text">arth</div>
 
-            <div class="underscore-wrapper relative">
-                <span id="char-underscore">_</span>
-                <div id="dynamic-underline"></div>
+            <div class="relative mx-1">
+                <span id="wrapper-at">e</span>
+                <div id="initial-underline"></div>
             </div>
+
+            <span id="char-underscore" class="reveal-text">_</span>
 
             <div id="text-ral" class="reveal-text">ral</div>
         </div>
@@ -173,7 +161,7 @@
                 <h1 class="text-2xl font-display font-bold tracking-tight text-white">NAEEM.</h1>
                 <div class="flex gap-4 text-sm font-medium text-slate-400 font-sans">
                     <a href="mailto:naeemshanavas@gmail.com" class="hover:text-white transition">Email</a>
-                    <a href="https://github.com/legacyosint" class="hover:text-white transition">GitHub</a>
+                    <a href="https://github.com/artheral" class="hover:text-white transition">GitHub</a>
                     <a href="https://www.linkedin.com/in/naeem-shanavas" class="hover:text-white transition">LinkedIn</a>
                 </div>
             </div>
@@ -237,7 +225,7 @@
             <div class="max-w-5xl mx-auto">
                 <div class="mb-10 border-b border-white/10 pb-4">
                     <h2 class="text-2xl font-display font-bold text-white">// GitHub Repositories</h2>
-                    <p class="text-slate-500 text-sm mt-1 font-sans">Live data from @legacyosint</p>
+                    <p class="text-slate-500 text-sm mt-1 font-sans">Live data from @artheral</p>
                 </div>
 
                 <div id="repo-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 font-sans">
@@ -257,69 +245,60 @@
         document.addEventListener("DOMContentLoaded", function() {
             // --- 1. SMOOTH ANIMATION SEQUENCE ---
             const wrapperAt = document.getElementById('wrapper-at');
-            const underline = document.getElementById('dynamic-underline');
-            const charUnderscore = document.getElementById('char-underscore');
+            const initialUnderline = document.getElementById('initial-underline');
             const textArth = document.getElementById('text-arth');
+            const charUnderscore = document.getElementById('char-underscore');
             const textRal = document.getElementById('text-ral');
             const splashScreen = document.getElementById('splash-screen');
             const mainContent = document.getElementById('main-content');
 
-            // Step 1: 0.5s - Show Underline under 'e'
+            // T+0.5s: Show Underline under 'e'
             setTimeout(() => { 
-                underline.style.opacity = '1'; 
+                initialUnderline.style.opacity = '1'; 
             }, 500);
 
-            // Step 2: 1.5s - Spin 'e' in 3D
+            // T+1.5s: Spin 'e' in 3D
             setTimeout(() => {
                 wrapperAt.classList.add('spin-3d');
             }, 1500);
 
-            // Step 3: 1.8s - Swap 'e' to '@' mid-spin
+            // T+1.9s: Swap 'e' to '@' mid-spin
             setTimeout(() => {
                 wrapperAt.textContent = "@";
-                wrapperAt.style.color = "#d946ef"; // Brand Purple
-            }, 1800);
+            }, 1900);
 
-            // Step 4: 2.5s - Morph Underline to Underscore
-            // We move the underline UP to meet the text baseline and fade it out
-            // while fading the text '_' in.
+            // T+3.0s: Slide out text and hide initial underline
             setTimeout(() => {
-                underline.style.bottom = "20px"; // Move up
-                underline.style.width = "20px"; // Shrink width
-                underline.style.opacity = "0"; // Fade out
-                
-                charUnderscore.style.opacity = "1";
-                charUnderscore.style.transform = "translateY(0)";
-            }, 2500);
+                // Fade out initial underline
+                initialUnderline.style.opacity = '0';
 
-            // Step 5: 3.0s - Slide out 'arth' and 'ral'
-            // Using max-width transition for smooth slide effect
-            setTimeout(() => {
-                textArth.style.maxWidth = "120px"; // Reveal arth
+                // Reveal all other parts smoothly
+                textArth.style.maxWidth = "3.5em"; 
                 textArth.style.opacity = "1";
-                textArth.style.marginRight = "2px";
                 
-                textRal.style.maxWidth = "80px"; // Reveal ral
+                charUnderscore.style.maxWidth = "1em";
+                charUnderscore.style.opacity = "1";
+
+                textRal.style.maxWidth = "2.5em"; 
                 textRal.style.opacity = "1";
-                textRal.style.marginLeft = "2px";
             }, 3000);
 
-            // Step 6: 4.5s - Blur and Scale Out
+            // T+5.0s: Luxurious Blur and Scale Out
             setTimeout(() => {
                 splashScreen.classList.add('blur-out');
                 mainContent.classList.remove('hidden-content');
                 mainContent.classList.add('visible-content');
-            }, 4500);
+            }, 5000);
 
-            // Step 7: 5.5s - Clean up DOM
+            // T+6.2s: Clean up DOM
             setTimeout(() => {
                 splashScreen.style.display = 'none';
-            }, 5500);
+            }, 6200);
 
 
             // --- 2. GITHUB FETCH LOGIC ---
             const container = document.getElementById('repo-grid');
-            const username = 'legacyosint';
+            const username = 'artheral';
             
             async function loadRepos() {
                 try {
