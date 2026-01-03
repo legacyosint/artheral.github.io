@@ -4,7 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Naeem Shanavas | Portfolio</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet">
@@ -92,35 +101,41 @@
             z-index: -1;
         }
     </style>
-
-    <script type="importmap">
-    {
-      "imports": {
-        "react": "https://esm.sh/react@18.2.0",
-        "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
-        "framer-motion": "https://esm.sh/framer-motion@10.12.16",
-        "lucide-react": "https://esm.sh/lucide-react@0.263.1"
-      }
-    }
-    </script>
 </head>
 <body>
     <div id="root"></div>
 
-    <script type="module">
-        import React, { useState, useEffect } from 'react';
-        import { createRoot } from 'react-dom/client';
-        import { motion } from 'framer-motion';
-        import { Github, Linkedin, Mail, Code2, Video, ExternalLink, Star, GitFork, ArrowRight } from 'lucide-react';
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        const { motion } = Motion;
+
+        // --- ICONS (Embedded directly to prevent loading errors) ---
+        const Icon = ({ path }) => (
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d={path} />
+            </svg>
+        );
+        const Icons = {
+            Mail: () => <Icon path="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z M22 6l-10 7L2 6" />,
+            Github: () => <Icon path="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4 M9 18c-4.51 2-5-2-7-2" />,
+            Linkedin: () => <Icon path="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z M2 9h4v12H2z M4 2a2 2 0 1 0 0 4 2 2 0 0 0 0-4z" />,
+            ArrowRight: () => <Icon path="M5 12h14 M12 5l7 7-7 7" />,
+            Code2: () => <Icon path="M16.24 7.76l4.76 4.24-4.76 4.24 M7.76 16.24L3 12l4.76-4.24 M10.25 19.5L13.75 4.5" />,
+            Video: () => <Icon path="M15 10l4.553-2.276A1 1 0 0 1 21 8.618v6.764a1 1 0 0 1-1.447.894L15 14M5 18h8a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2z" />,
+            ExternalLink: () => <Icon path="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6 M15 3h6v6 M10 14L21 3" />,
+            Star: () => <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>,
+            GitFork: () => <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="18" r="3"></circle><circle cx="6" cy="6" r="3"></circle><circle cx="18" cy="6" r="3"></circle><path d="M18 9v1a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V9"></path><path d="M12 12v3"></path></svg>
+        };
 
         const App = () => {
             const [repos, setRepos] = useState([]);
 
-            // Fetch GitHub Repos
             useEffect(() => {
                 fetch('https://api.github.com/users/legacyosint/repos?sort=pushed&per_page=6')
                     .then(res => res.json())
-                    .then(data => setRepos(data))
+                    .then(data => {
+                        if(Array.isArray(data)) setRepos(data);
+                    })
                     .catch(err => console.error(err));
             }, []);
 
@@ -133,174 +148,178 @@
                 visible: { transition: { staggerChildren: 0.15 } }
             };
 
-            return React.createElement('div', { className: "min-h-screen relative" },
-                // Background Glows
-                React.createElement('div', { className: "glow-orb w-[600px] h-[600px] bg-brand-600 top-[-200px] left-[-100px]" }),
-                React.createElement('div', { className: "glow-orb w-[500px] h-[500px] bg-cyan-500 bottom-[-100px] right-[-100px]" }),
+            return (
+                <div className="min-h-screen relative">
+                    {/* Glow Orbs */}
+                    <div className="glow-orb w-[600px] h-[600px] bg-brand-600 top-[-200px] left-[-100px]" />
+                    <div className="glow-orb w-[500px] h-[500px] bg-cyan-500 bottom-[-100px] right-[-100px]" />
 
-                // Navigation
-                React.createElement('nav', { className: "w-full py-8 px-6" },
-                    React.createElement('div', { className: "max-w-7xl mx-auto flex justify-between items-center" },
-                        React.createElement('span', { className: "text-2xl font-display font-bold text-white tracking-tight" }, "NAEEM."),
-                        React.createElement('div', { className: "flex gap-4" },
-                            React.createElement('a', { href: "mailto:naeemshanavas@gmail.com", className: "text-slate-400 hover:text-white transition-colors" }, React.createElement(Mail, { size: 20 })),
-                            React.createElement('a', { href: "https://github.com/legacyosint", className: "text-slate-400 hover:text-white transition-colors" }, React.createElement(Github, { size: 20 })),
-                            React.createElement('a', { href: "https://www.linkedin.com/in/naeem-shanavas", className: "text-slate-400 hover:text-white transition-colors" }, React.createElement(Linkedin, { size: 20 }))
-                        )
-                    )
-                ),
+                    {/* Navigation */}
+                    <nav className="w-full py-8 px-6">
+                        <div className="max-w-7xl mx-auto flex justify-between items-center">
+                            <span className="text-2xl font-display font-bold text-white tracking-tight">NAEEM.</span>
+                            <div className="flex gap-4">
+                                <a href="mailto:naeemshanavas@gmail.com" className="text-slate-400 hover:text-white transition-colors"><Icons.Mail /></a>
+                                <a href="https://github.com/legacyosint" className="text-slate-400 hover:text-white transition-colors"><Icons.Github /></a>
+                                <a href="https://www.linkedin.com/in/naeem-shanavas" className="text-slate-400 hover:text-white transition-colors"><Icons.Linkedin /></a>
+                            </div>
+                        </div>
+                    </nav>
 
-                // Hero Section
-                React.createElement('section', { className: "pt-20 pb-32 px-6" },
-                    React.createElement(motion.div, { 
-                        initial: "hidden", 
-                        animate: "visible", 
-                        variants: stagger,
-                        className: "max-w-5xl mx-auto text-center" 
-                    },
-                        React.createElement(motion.div, { variants: fadeIn, className: "inline-block mb-6 px-4 py-1.5 rounded-full glass text-xs font-semibold tracking-wide text-brand-400 border border-brand-500/20" }, 
-                            "CYBER SECURITY & AI DEVELOPER"
-                        ),
-                        React.createElement(motion.h1, { variants: fadeIn, className: "text-5xl md:text-8xl font-display font-bold leading-tight mb-8" },
-                            "Building the ", React.createElement('br', { className: "hidden md:block" }),
-                            "Future of ", React.createElement('span', { className: "gradient-text" }, "Tech & Visuals")
-                        ),
-                        React.createElement(motion.p, { variants: fadeIn, className: "text-lg text-slate-400 max-w-2xl mx-auto mb-10" },
-                            "I am Naeem Shanavas. Highly experienced in Offensive Security, AI Development, and 3D Motion Graphics. Merging logic with creativity."
-                        ),
-                        React.createElement(motion.div, { variants: fadeIn, className: "flex justify-center gap-4" },
-                            React.createElement('a', { href: "#projects", className: "px-8 py-3 rounded-full bg-white text-dark font-bold hover:bg-brand-100 transition-colors flex items-center gap-2" }, 
-                                "View Projects", React.createElement(ArrowRight, { size: 18 })
-                            ),
-                            React.createElement('a', { href: "resume.pdf", className: "px-8 py-3 rounded-full glass text-white font-medium hover:bg-white/5 transition-colors" }, 
-                                "Download CV"
-                            )
-                        )
-                    )
-                ),
+                    {/* Hero Section */}
+                    <section className="pt-20 pb-32 px-6">
+                        <motion.div 
+                            initial="hidden" 
+                            animate="visible" 
+                            variants={stagger}
+                            className="max-w-5xl mx-auto text-center"
+                        >
+                            <motion.div variants={fadeIn} className="inline-block mb-6 px-4 py-1.5 rounded-full glass text-xs font-semibold tracking-wide text-brand-400 border border-brand-500/20">
+                                CYBER SECURITY & AI DEVELOPER
+                            </motion.div>
+                            <motion.h1 variants={fadeIn} className="text-5xl md:text-8xl font-display font-bold leading-tight mb-8">
+                                Building the <br className="hidden md:block" />
+                                Future of <span className="gradient-text">Tech & Visuals</span>
+                            </motion.h1>
+                            <motion.p variants={fadeIn} className="text-lg text-slate-400 max-w-2xl mx-auto mb-10">
+                                I am Naeem Shanavas. Highly experienced in Offensive Security, AI Development, and 3D Motion Graphics. Merging logic with creativity.
+                            </motion.p>
+                            <motion.div variants={fadeIn} className="flex justify-center gap-4">
+                                <a href="#projects" className="px-8 py-3 rounded-full bg-white text-dark font-bold hover:bg-brand-100 transition-colors flex items-center gap-2">
+                                    View Projects <Icons.ArrowRight />
+                                </a>
+                                <a href="resume.pdf" className="px-8 py-3 rounded-full glass text-white font-medium hover:bg-white/5 transition-colors">
+                                    Download CV
+                                </a>
+                            </motion.div>
+                        </motion.div>
+                    </section>
 
-                // Capabilities Section
-                React.createElement('section', { className: "py-20 px-6 relative z-10" },
-                    React.createElement('div', { className: "max-w-6xl mx-auto" },
-                        React.createElement('div', { className: "mb-12 flex items-end gap-4 border-b border-white/10 pb-4" },
-                            React.createElement('h2', { className: "text-3xl font-display font-bold" }, "// Capabilities"),
-                            React.createElement('p', { className: "text-slate-500 pb-1" }, "These are the stuff i am highly experienced in")
-                        ),
-                        
-                        React.createElement('div', { className: "grid md:grid-cols-2 gap-8" },
-                            // Programming Card
-                            React.createElement(motion.div, { 
-                                initial: { opacity: 0, y: 20 },
-                                whileInView: { opacity: 1, y: 0 },
-                                transition: { delay: 0.1 },
-                                className: "glass rounded-3xl p-8 md:p-12 transition-all duration-300" 
-                            },
-                                React.createElement('div', { className: "w-12 h-12 rounded-xl bg-brand-500/20 flex items-center justify-center text-brand-400 mb-6" },
-                                    React.createElement(Code2, { size: 28 })
-                                ),
-                                React.createElement('h3', { className: "text-2xl font-bold mb-2 text-white" }, "Programming & Web Dev"),
-                                React.createElement('p', { className: "text-xs font-bold tracking-widest text-brand-500 mb-6 uppercase" }, "AI • Data Science"),
-                                React.createElement('p', { className: "text-slate-400 mb-8 leading-relaxed" }, 
-                                    "I am a well experienced coding and AI dev, my short projects are all attached to the next page, my repo's are all just pure example of my favorite hobby."
-                                ),
-                                React.createElement('div', { className: "flex flex-wrap gap-2" },
-                                    ['Web Dev', 'Coding', 'Entrepreneur', 'Python', 'React'].map(tag => 
-                                        React.createElement('span', { key: tag, className: "px-3 py-1 rounded-full border border-white/10 text-xs text-slate-300 bg-white/5" }, tag)
-                                    )
-                                )
-                            ),
+                    {/* Capabilities */}
+                    <section className="py-20 px-6 relative z-10">
+                        <div className="max-w-6xl mx-auto">
+                            <div className="mb-12 flex items-end gap-4 border-b border-white/10 pb-4">
+                                <h2 className="text-3xl font-display font-bold">// Capabilities</h2>
+                                <p className="text-slate-500 pb-1">These are the stuff i am highly experienced in</p>
+                            </div>
+                            
+                            <div className="grid md:grid-cols-2 gap-8">
+                                {/* Programming Card */}
+                                <motion.div 
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.1 }}
+                                    className="glass rounded-3xl p-8 md:p-12 transition-all duration-300"
+                                >
+                                    <div className="w-12 h-12 rounded-xl bg-brand-500/20 flex items-center justify-center text-brand-400 mb-6">
+                                        <Icons.Code2 />
+                                    </div>
+                                    <h3 className="text-2xl font-bold mb-2 text-white">Programming & Web Dev</h3>
+                                    <p className="text-xs font-bold tracking-widest text-brand-500 mb-6 uppercase">AI • Data Science</p>
+                                    <p className="text-slate-400 mb-8 leading-relaxed">
+                                        I am a well experienced coding and AI dev, my short projects are all attached to the next page, my repo's are all just pure example of my favorite hobby.
+                                    </p>
+                                    <div className="flex flex-wrap gap-2">
+                                        {['Web Dev', 'Coding', 'Entrepreneur', 'Python', 'React'].map(tag => (
+                                            <span key={tag} className="px-3 py-1 rounded-full border border-white/10 text-xs text-slate-300 bg-white/5">{tag}</span>
+                                        ))}
+                                    </div>
+                                </motion.div>
 
-                            // Video Editing Card
-                            React.createElement(motion.div, { 
-                                initial: { opacity: 0, y: 20 },
-                                whileInView: { opacity: 1, y: 0 },
-                                transition: { delay: 0.2 },
-                                className: "glass rounded-3xl p-8 md:p-12 transition-all duration-300" 
-                            },
-                                React.createElement('div', { className: "w-12 h-12 rounded-xl bg-cyan-500/20 flex items-center justify-center text-cyan-400 mb-6" },
-                                    React.createElement(Video, { size: 28 })
-                                ),
-                                React.createElement('h3', { className: "text-2xl font-bold mb-2 text-white" }, "Video Editing & 3D"),
-                                React.createElement('p', { className: "text-xs font-bold tracking-widest text-cyan-500 mb-6 uppercase" }, "GFX • VFX • Blender"),
-                                React.createElement('p', { className: "text-slate-400 mb-8 leading-relaxed" }, 
-                                    "I love and am passionate about 3D and graphical video editing, its helped me earn plenty bucks from freelancing and commissions, i love to keep it as a side business."
-                                ),
-                                React.createElement('div', { className: "flex flex-wrap gap-2 mb-8" },
-                                    ['After Effects', 'Cinema 4D', '3D', 'Blender'].map(tag => 
-                                        React.createElement('span', { key: tag, className: "px-3 py-1 rounded-full border border-white/10 text-xs text-slate-300 bg-white/5" }, tag)
-                                    )
-                                ),
-                                React.createElement('a', { href: "https://fiverr.com/naeemshanavas", target: "_blank", className: "inline-flex items-center gap-2 text-sm font-bold text-cyan-400 hover:text-cyan-300" },
-                                    "View Business", React.createElement(ExternalLink, { size: 14 })
-                                )
-                            )
-                        )
-                    )
-                ),
+                                {/* Video Card */}
+                                <motion.div 
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.2 }}
+                                    className="glass rounded-3xl p-8 md:p-12 transition-all duration-300"
+                                >
+                                    <div className="w-12 h-12 rounded-xl bg-cyan-500/20 flex items-center justify-center text-cyan-400 mb-6">
+                                        <Icons.Video />
+                                    </div>
+                                    <h3 className="text-2xl font-bold mb-2 text-white">Video Editing & 3D</h3>
+                                    <p className="text-xs font-bold tracking-widest text-cyan-500 mb-6 uppercase">GFX • VFX • Blender</p>
+                                    <p className="text-slate-400 mb-8 leading-relaxed">
+                                        I love and am passionate about 3D and graphical video editing, its helped me earn plenty bucks from freelancing and commissions, i love to keep it as a side business.
+                                    </p>
+                                    <div className="flex flex-wrap gap-2 mb-8">
+                                        {['After Effects', 'Cinema 4D', '3D', 'Blender'].map(tag => (
+                                            <span key={tag} className="px-3 py-1 rounded-full border border-white/10 text-xs text-slate-300 bg-white/5">{tag}</span>
+                                        ))}
+                                    </div>
+                                    <a href="https://fiverr.com/naeemshanavas" target="_blank" className="inline-flex items-center gap-2 text-sm font-bold text-cyan-400 hover:text-cyan-300">
+                                        View Business <Icons.ExternalLink />
+                                    </a>
+                                </motion.div>
+                            </div>
+                        </div>
+                    </section>
 
-                // Projects Section
-                React.createElement('section', { id: "projects", className: "py-24 px-6" },
-                    React.createElement('div', { className: "max-w-6xl mx-auto" },
-                        React.createElement('div', { className: "mb-12 border-b border-white/10 pb-4" },
-                            React.createElement('h2', { className: "text-3xl font-display font-bold" }, "// GitHub Repositories"),
-                            React.createElement('p', { className: "text-slate-500 mt-2" }, 
-                                "Live data from ", React.createElement('span', { className: "text-brand-400 font-mono" }, "@legacyosint")
-                            )
-                        ),
+                    {/* Projects */}
+                    <section id="projects" className="py-24 px-6">
+                        <div className="max-w-6xl mx-auto">
+                            <div className="mb-12 border-b border-white/10 pb-4">
+                                <h2 className="text-3xl font-display font-bold">// GitHub Repositories</h2>
+                                <p className="text-slate-500 mt-2">
+                                    Live data from <span className="text-brand-400 font-mono">@legacyosint</span>
+                                </p>
+                            </div>
 
-                        React.createElement('div', { className: "grid md:grid-cols-2 lg:grid-cols-3 gap-6" },
-                            repos.length > 0 ? repos.map((repo, i) => 
-                                React.createElement(motion.a, { 
-                                    key: repo.id,
-                                    href: repo.html_url,
-                                    target: "_blank",
-                                    initial: { opacity: 0, scale: 0.95 },
-                                    whileInView: { opacity: 1, scale: 1 },
-                                    transition: { delay: i * 0.1 },
-                                    className: "glass p-6 rounded-2xl group flex flex-col h-full hover:bg-white/5"
-                                },
-                                    React.createElement('div', { className: "flex justify-between items-start mb-4" },
-                                        React.createElement(Code2, { size: 20, className: "text-brand-500" }),
-                                        React.createElement(ExternalLink, { size: 16, className: "text-slate-600 group-hover:text-white transition-colors" })
-                                    ),
-                                    React.createElement('h3', { className: "font-bold text-lg text-white mb-2 group-hover:text-brand-400 transition-colors" }, repo.name),
-                                    React.createElement('p', { className: "text-sm text-slate-400 mb-6 flex-grow line-clamp-3" }, repo.description || "No description provided."),
-                                    React.createElement('div', { className: "flex items-center gap-4 text-xs text-slate-500" },
-                                        React.createElement('span', { className: "flex items-center gap-1" }, React.createElement('span', { className: "w-2 h-2 rounded-full bg-cyan-500" }), repo.language || "Code"),
-                                        React.createElement('span', { className: "flex items-center gap-1" }, React.createElement(Star, { size: 12 }), repo.stargazers_count),
-                                        React.createElement('span', { className: "flex items-center gap-1" }, React.createElement(GitFork, { size: 12 }), repo.forks_count)
-                                    )
-                                )
-                            ) : React.createElement('p', { className: "text-slate-500 col-span-3 text-center py-10" }, "Loading repositories...")
-                        )
-                    )
-                ),
+                            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                {repos.length > 0 ? repos.map((repo, i) => (
+                                    <motion.a 
+                                        key={repo.id}
+                                        href={repo.html_url}
+                                        target="_blank"
+                                        initial={{ opacity: 0, scale: 0.95 }}
+                                        whileInView={{ opacity: 1, scale: 1 }}
+                                        transition={{ delay: i * 0.1 }}
+                                        className="glass p-6 rounded-2xl group flex flex-col h-full hover:bg-white/5"
+                                    >
+                                        <div className="flex justify-between items-start mb-4">
+                                            <div className="text-brand-500"><Icons.Code2 /></div>
+                                            <div className="text-slate-600 group-hover:text-white transition-colors"><Icons.ExternalLink /></div>
+                                        </div>
+                                        <h3 className="font-bold text-lg text-white mb-2 group-hover:text-brand-400 transition-colors">{repo.name}</h3>
+                                        <p className="text-sm text-slate-400 mb-6 flex-grow line-clamp-3">{repo.description || "No description provided."}</p>
+                                        <div className="flex items-center gap-4 text-xs text-slate-500">
+                                            <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-cyan-500"></span> {repo.language || "Code"}</span>
+                                            <span className="flex items-center gap-1"><Icons.Star /> {repo.stargazers_count}</span>
+                                            <span className="flex items-center gap-1"><Icons.GitFork /> {repo.forks_count}</span>
+                                        </div>
+                                    </motion.a>
+                                )) : (
+                                    <p className="text-slate-500 col-span-3 text-center py-10">Loading repositories...</p>
+                                )}
+                            </div>
+                        </div>
+                    </section>
 
-                // Footer / Contact
-                React.createElement('footer', { className: "py-12 border-t border-white/5 mt-12 bg-dark/50" },
-                    React.createElement('div', { className: "max-w-6xl mx-auto px-6 text-center" },
-                        React.createElement('h2', { className: "text-2xl font-display font-bold mb-8" }, "Let's Collaborate"),
-                        React.createElement('div', { className: "flex flex-wrap justify-center gap-6 mb-8" },
-                            React.createElement('a', { href: "mailto:naeemshanavas@gmail.com", className: "px-6 py-3 glass rounded-full text-sm font-medium hover:text-brand-400 transition-colors flex items-center gap-2" },
-                                React.createElement(Mail, { size: 16 }), "naeemshanavas@gmail.com"
-                            ),
-                            React.createElement('a', { href: "https://github.com/legacyosint", className: "px-6 py-3 glass rounded-full text-sm font-medium hover:text-brand-400 transition-colors flex items-center gap-2" },
-                                React.createElement(Github, { size: 16 }), "legacyosint"
-                            ),
-                            React.createElement('a', { href: "https://www.linkedin.com/in/naeem-shanavas", className: "px-6 py-3 glass rounded-full text-sm font-medium hover:text-brand-400 transition-colors flex items-center gap-2" },
-                                React.createElement(Linkedin, { size: 16 }), "naeem-shanavas"
-                            )
-                        ),
-                        React.createElement('p', { className: "text-slate-600 text-sm" }, 
-                            "© 2026 Naeem Shanavas. Crafted with Code & Creativity."
-                        )
-                    )
-                )
+                    {/* Footer */}
+                    <footer className="py-12 border-t border-white/5 mt-12 bg-dark/50">
+                        <div className="max-w-6xl mx-auto px-6 text-center">
+                            <h2 className="text-2xl font-display font-bold mb-8">Let's Collaborate</h2>
+                            <div className="flex flex-wrap justify-center gap-6 mb-8">
+                                <a href="mailto:naeemshanavas@gmail.com" className="px-6 py-3 glass rounded-full text-sm font-medium hover:text-brand-400 transition-colors flex items-center gap-2">
+                                    <Icons.Mail /> naeemshanavas@gmail.com
+                                </a>
+                                <a href="https://github.com/legacyosint" className="px-6 py-3 glass rounded-full text-sm font-medium hover:text-brand-400 transition-colors flex items-center gap-2">
+                                    <Icons.Github /> legacyosint
+                                </a>
+                                <a href="https://www.linkedin.com/in/naeem-shanavas" className="px-6 py-3 glass rounded-full text-sm font-medium hover:text-brand-400 transition-colors flex items-center gap-2">
+                                    <Icons.Linkedin /> naeem-shanavas
+                                </a>
+                            </div>
+                            <p className="text-slate-600 text-sm">
+                                © 2026 Naeem Shanavas. Crafted with Code & Creativity.
+                            </p>
+                        </div>
+                    </footer>
+                </div>
             );
         };
 
-        const root = createRoot(document.getElementById('root'));
-        root.render(React.createElement(App));
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
     </script>
 </body>
 </html>
