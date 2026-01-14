@@ -5,25 +5,87 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Naeem Shanavas | Business & Ecommerce Portfolio</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script src="https://platform.linkedin.com/badges/js/profile.js" async defer type="text/javascript"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#050814',
+                        brand: { 500: '#d946ef', 400: '#e879f9' },
+                        cyan: { 500: '#06b6d4', 400: '#22d3ee' }
+                    },
+                    fontFamily: {
+                        sans: ['TTCommonsLocal', 'Inter', 'sans-serif'],
+                        display: ['HelveticaLocal', 'sans-serif'],
+                        nav: ['AlroLocal', 'sans-serif'],
+                        header: ['YapariLocal', 'sans-serif'],
+                        script: ['FormalScriptLocal', 'serif'],
+                        italic: ['AldynHeartItalic', 'serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
     <style>
-        /* --- FONTS --- */
-        .ttcommons {
-            font-family: 'Inter', sans-serif; /* Fallback to Inter if local font missing */
+        /* --- FONT FACES --- */
+        @font-face {
+            font-family: 'TTCommonsLocal';
+            src: url('./fonts/Fontspring-DEMO-tt_commons_pro_regular.otf') format('opentype');
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
         }
 
-        .tools-description.ttcommons {
-            font-family: 'Inter', sans-serif;
+        @font-face {
+            font-family: 'HelveticaLocal';
+            src: url('./fonts/Helvetica-Bold.ttf') format('truetype');
+            font-weight: 700;
+            font-style: normal;
+            font-display: swap;
         }
 
-        /* --- RESET & BASE --- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        @font-face {
+            font-family: 'FormalScriptLocal';
+            src: url('./fonts/FormalScriptBold.otf') format('opentype');
+            font-weight: 700;
+            font-style: normal;
+            font-display: swap;
         }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        @font-face {
+            font-family: 'AldynHeartItalic';
+            src: url('./fonts/Aldyn Heart Italic.ttf') format('truetype');
+            font-weight: 400;
+            font-style: italic;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'AlroLocal';
+            src: url('./fonts/alro-alro-bold-700.ttf') format('truetype');
+            font-weight: 700;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'YapariLocal';
+            src: url('./fonts/YapariTrial-Medium.ttf') format('truetype');
+            font-weight: 500;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        /* --- GLOBAL STYLES --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'TTCommonsLocal', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background: #000000;
             color: white;
             overflow-x: hidden;
@@ -35,7 +97,6 @@
             transform: translateY(40px);
             transition: all 0.9s cubic-bezier(.165, .84, .44, 1);
         }
-
         .reveal.active {
             opacity: 1;
             transform: translateY(0);
@@ -60,6 +121,7 @@
             transition: box-shadow 0.6s ease;
         }
 
+        /* --- NAVIGATION --- */
         nav {
             position: relative;
             z-index: 2;
@@ -73,8 +135,8 @@
         }
 
         .logo {
+            font-family: 'AlroLocal', sans-serif;
             font-size: 1.5rem;
-            font-weight: 800;
             letter-spacing: 1px;
             color: white;
             text-transform: uppercase;
@@ -89,7 +151,8 @@
         .nav-links a {
             color: white;
             text-decoration: none;
-            font-weight: 600;
+            font-family: 'AlroLocal', sans-serif;
+            font-size: 0.9rem;
             padding: 0.6rem 1.2rem;
             border-radius: 12px;
             background: rgba(255, 255, 255, 0.05);
@@ -109,6 +172,7 @@
             padding: 0.8rem 1.8rem;
             border-radius: 30px;
             text-decoration: none;
+            font-family: 'TTCommonsLocal', sans-serif;
             font-weight: 600;
             display: inline-flex;
             align-items: center;
@@ -116,9 +180,7 @@
             transition: transform 0.3s;
         }
 
-        .cta-button:hover {
-            transform: scale(1.05);
-        }
+        .cta-button:hover { transform: scale(1.05); }
 
         .arrow {
             width: 20px;
@@ -132,6 +194,7 @@
             color: white;
         }
 
+        /* --- HERO CONTENT --- */
         .hero-content {
             position: relative;
             z-index: 2;
@@ -145,16 +208,24 @@
         }
 
         .hero-text h1 {
-            font-size: clamp(3rem, 7vw, 6rem);
-            font-weight: 800;
-            line-height: 1.1;
+            font-family: 'HelveticaLocal', sans-serif;
+            font-size: clamp(3.5rem, 8vw, 7rem);
+            font-weight: 700;
+            line-height: 0.95;
             margin-bottom: 2rem;
             text-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            letter-spacing: -0.03em;
         }
 
-        .highlight {
-            color: #ff6b35; /* Orange accent */
+        .fancy-script {
+            font-family: 'FormalScriptLocal', serif;
+            font-weight: 400;
+            font-size: 0.7em;
+            color: #ff6b35;
+            margin-right: 10px;
         }
+
+        .highlight { color: #ff6b35; }
 
         .services {
             display: grid;
@@ -184,6 +255,7 @@
         .service-name {
             font-size: 1rem;
             font-weight: 600;
+            font-family: 'TTCommonsLocal', sans-serif;
         }
 
         .hero-right {
@@ -195,13 +267,15 @@
         }
 
         .hero-right h3 {
+            font-family: 'YapariLocal', sans-serif;
             font-size: 1.5rem;
             margin-bottom: 1rem;
             line-height: 1.3;
         }
 
         .hero-right p {
-            font-size: 1rem;
+            font-family: 'TTCommonsLocal', sans-serif;
+            font-size: 1.1rem;
             opacity: 0.8;
             line-height: 1.6;
         }
@@ -214,6 +288,7 @@
         }
 
         .brands-title {
+            font-family: 'TTCommonsLocal', sans-serif;
             font-size: 0.9rem;
             margin-bottom: 2rem;
             opacity: 0.5;
@@ -228,8 +303,8 @@
             gap: 3rem;
             flex-wrap: wrap;
             align-items: center;
+            font-family: 'YapariLocal', sans-serif;
             font-size: 1.5rem;
-            font-weight: bold;
             opacity: 0.6;
         }
 
@@ -256,6 +331,7 @@
 
         .section-label {
             color: #ff6b35;
+            font-family: 'TTCommonsLocal', sans-serif;
             font-weight: 600;
             margin-bottom: 1rem;
             text-transform: uppercase;
@@ -263,13 +339,21 @@
         }
 
         .about-title {
+            font-family: 'HelveticaLocal', sans-serif;
             font-size: 3.5rem;
             line-height: 1.1;
-            font-weight: 700;
+        }
+
+        .italic-accent {
+            font-family: 'AldynHeartItalic', serif;
+            font-weight: 400;
+            font-size: 1.2em;
+            color: #e879f9;
         }
 
         .about-description {
-            font-size: 1rem;
+            font-family: 'TTCommonsLocal', sans-serif;
+            font-size: 1.1rem;
             line-height: 1.6;
             color: #aaa;
             max-width: 600px;
@@ -309,7 +393,7 @@
             justify-content: center;
             border: 1px solid #333;
             color: #555;
-            font-weight: bold;
+            font-family: 'YapariLocal', sans-serif;
             font-size: 1.2rem;
         }
 
@@ -325,10 +409,10 @@
         }
 
         .about-details h3 {
-            font-size: 0.9rem;
-            font-weight: 700;
+            font-family: 'YapariLocal', sans-serif;
+            font-size: 1rem;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
             color: #ff6b35;
             margin-bottom: 1rem;
             margin-top: 2rem;
@@ -337,7 +421,8 @@
         .about-details h3:first-child { margin-top: 0; }
 
         .about-details p, .about-details ul {
-            font-size: 0.9rem;
+            font-family: 'TTCommonsLocal', sans-serif;
+            font-size: 1rem;
             line-height: 1.8;
             color: #cfcfcf;
             list-style: none;
@@ -352,7 +437,8 @@
             align-items: center;
             justify-content: center;
             color: #444;
-            font-weight: bold;
+            font-family: 'AlroLocal', sans-serif;
+            font-size: 1.5rem;
             border: 1px solid #333;
         }
 
@@ -371,6 +457,7 @@
         }
 
         .tools-title {
+            font-family: 'TTCommonsLocal', sans-serif;
             font-size: 0.9rem;
             margin-bottom: 2rem;
             opacity: 0.5;
@@ -396,13 +483,15 @@
         .tool-item:hover { transform: translateY(-5px); background: rgba(255,255,255,0.1); }
 
         .tool-name {
-            font-size: 0.85rem;
+            font-family: 'TTCommonsLocal', sans-serif;
+            font-size: 1rem;
             font-weight: 600;
             display: block;
         }
 
         .tools-description {
-            font-size: 1.3rem;
+            font-family: 'TTCommonsLocal', sans-serif;
+            font-size: 1.4rem;
             line-height: 1.6;
             opacity: 0.9;
             padding-left: 2rem;
@@ -436,26 +525,11 @@
             z-index: 2;
         }
 
-        .category-video {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.4;
-            transition: transform 0.8s ease, opacity 0.5s ease;
-        }
-
-        .category-card:hover .category-video {
-            transform: scale(1.05);
-            opacity: 0.7;
-        }
-
         .category-title {
             position: relative;
             z-index: 3;
-            font-size: 2rem;
-            font-weight: 700;
+            font-family: 'HelveticaLocal', sans-serif;
+            font-size: 2.5rem;
             color: white;
             text-transform: uppercase;
             letter-spacing: 2px;
@@ -478,12 +552,14 @@
 
         .footer-name {
             grid-column: 1 / -1;
-            font-size: clamp(3rem, 15vw, 10rem);
+            font-family: 'HelveticaLocal', sans-serif;
+            font-size: clamp(3rem, 15vw, 12rem);
             font-weight: 800;
             color: rgba(255, 255, 255, 0.05);
             text-align: center;
             margin-bottom: 2rem;
             user-select: none;
+            letter-spacing: -0.04em;
         }
 
         .footer-links {
@@ -499,17 +575,19 @@
         }
 
         .footer-column span {
+            font-family: 'YapariLocal', sans-serif;
             color: #ff6b35;
-            font-weight: 600;
             text-transform: uppercase;
             font-size: 0.8rem;
             margin-bottom: 0.5rem;
         }
 
         .footer-column a {
+            font-family: 'TTCommonsLocal', sans-serif;
             color: #aaa;
             text-decoration: none;
             transition: color 0.3s;
+            font-size: 1.1rem;
         }
 
         .footer-column a:hover { color: white; }
@@ -519,7 +597,8 @@
             padding-top: 1.5rem;
             border-top: 1px solid rgba(255, 255, 255, 0.08);
             text-align: center;
-            font-size: 0.8rem;
+            font-family: 'TTCommonsLocal', sans-serif;
+            font-size: 0.9rem;
             color: #555;
         }
 
@@ -535,7 +614,7 @@
             .footer-links { justify-content: center; }
             .categories-section { grid-template-columns: 1fr; height: auto; }
             .category-card { height: 50vh; }
-            .nav-links { display: none; } /* Simple hide for mobile */
+            .nav-links { display: none; }
         }
     </style>
 </head>
@@ -558,9 +637,10 @@
         <div class="hero-content reveal">
             <div class="hero-text">
                 <h1>
+                    <span class="fancy-script">Future</span><br>
                     Business<br>
-                    <span class="highlight">Enthusiast</span><br>
-                    & Scaling Strategist
+                    <span class="highlight">Scaling</span><br>
+                    Strategist
                 </h1>
 
                 <div class="services">
@@ -617,6 +697,7 @@
             <div class="about-left">
                 <p class="section-label">My Journey</p>
                 <h2 class="about-title">From Tech<br>To <span class="highlight">Business</span></h2>
+                <span class="italic-accent">Evolution of a Strategist</span>
             </div>
 
             <div class="about-divider"></div>
@@ -674,7 +755,7 @@
             <p>Business Strategy, Digital Marketing, Financial Analysis</p>
 
             <h3>Connect</h3>
-            <p>Let's discuss your next venture.<br><a href="contact.html">Get in touch</a></p>
+            <p>Let's discuss your next venture.<br><a href="contact.html" style="color:#ff6b35;">Get in touch</a></p>
         </div>
     </section>
 
@@ -714,16 +795,12 @@
         </a>
     </section>
 
-    <div id="glass-button-container">
-        <a href="contact.html" style="text-decoration:none; color:white; font-weight:bold; text-transform:uppercase;">Connect</a>
-    </div>
-
     <footer class="site-footer">
         <div class="footer-container">
             <div class="footer-name">NAEEM</div>
             
             <div class="footer-left">
-                <p style="color: #aaa;">Building value through innovation and strategy.</p>
+                <p style="color: #aaa; font-family: 'TTCommonsLocal', sans-serif;">Building value through innovation and strategy.</p>
             </div>
 
             <div class="footer-links">
